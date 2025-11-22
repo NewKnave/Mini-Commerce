@@ -1,4 +1,0 @@
-void sell(void)
-{
-
-}
