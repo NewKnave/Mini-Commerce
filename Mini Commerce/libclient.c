@@ -50,6 +50,8 @@ int SignInProcess(void)
 
 	char NameInput[64];
 	char PasswordInput[64];
+	int PasswordLenght;
+	char HashCache[64];
 
 	printf("\nName: ");
 	fgets(NameInput, sizeof(NameInput), stdin);
@@ -58,17 +60,16 @@ int SignInProcess(void)
 	printf("Password: ");
 	fgets(PasswordInput, sizeof(PasswordInput), stdin);
 	PasswordInput[strcspn(PasswordInput, "\n")] = '\0';
+	PasswordLenght = strlen(PasswordInput);
 
-	// Mini hash
-	int PasswordLenght = strlen(PasswordInput);
-	char HashCache[64];
-	for(int i = 0; i < (PasswordLenght + 1); i++) {
-		HashCache[i] = (PasswordInput[i] % 10) + '0';
-		if(i == PasswordLenght) {
-			HashCache[i] = '\0';
-		}
+	for(int i = 0; i < PasswordLenght; i++) {
+		HashCache[i] = ((PasswordInput[i] % 10) + '0');
 	}
-
+	HashCache[PasswordLenght] = '\0';
+printf("%s\n", HashCache);
+printf("%s\n", user[0].password);
+printf("%s\n", NameInput);
+printf("%s\n", user[0].name);
 	for(int i = 0; i < TotalClients; i++) {
 		if(strcmp(NameInput, user[i].name) == 0 && strcmp(HashCache, user[i].password) == 0) {
 			return user[i].id;
@@ -165,14 +166,14 @@ int SignUpProcess(void)
 
 	user = realloc(user, TotalClients * sizeof(user));
 	if(user == NULL) {
-		printf("System error - User memory allocation failure\n");
+		printf("System error - LC1 - Memory allocation failure\n");
 		return FAILED;
 	}
 
 	// Name
 	user[ArrayLocation].name = malloc(NameLenght * sizeof(char));
 	if(user[ArrayLocation].name == NULL) {
-		printf("System error - User name memory allocation failure\n");
+		printf("System error - LC2 - Memory allocation failure\n");
 		return FAILED;
 	}
 	strcpy(user[ArrayLocation].name, NameInput);
@@ -180,17 +181,15 @@ int SignUpProcess(void)
 	// Password
 	user[ArrayLocation].password = malloc(PasswordLenght * sizeof(char));
 	if(user[ArrayLocation].password == NULL) {
-		printf("System error - User name memory allocation failure\n");
+		printf("System error - LC3 - Memory allocation failure\n");
 		return FAILED;
 	}
 
 	// Mini hash
-	for(int i = 0; i < (PasswordLenght + 1); i++) {
+	for(int i = 0; i < PasswordLenght; i++) {
 		HashCache[i] = ((PasswordInput[i] % 10) + '0');
-		if(i == PasswordLenght) {
-			HashCache[i] = '\0';
-		}
 	}
+	HashCache[PasswordLenght] = '\0';
 	strcpy(user[ArrayLocation].password, HashCache);
 
 	// ID

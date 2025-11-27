@@ -11,6 +11,7 @@ MarketData *head;
 
 int ProductIDCounter = 0;
 int TotalProducts = 0;
+int TotalProductsInCart = 0;
 
 void CreateLinkedList(void)
 {
@@ -80,6 +81,12 @@ void Profile(int ProfileID)
 	int NameLenght = 0;
 	int PasswordLenght = 0;
 	char PasswordBuffer[64];
+	char HashCache[64];
+
+	int OldNameLenght = 0;
+	char OldName[64];
+	int OldPasswordLenght = 0;
+	char OldPassword[64];
 
 	char UserInput[64];
 	int Selection;
@@ -101,6 +108,9 @@ void Profile(int ProfileID)
 		switch (Selection) {
 
 		case 1:
+			OldNameLenght = strlen(user[UserDataLocation].name);
+			strcpy(OldName, user[UserDataLocation].name);
+
 			printf("\nChanging name\n");
 			printf("User: ");
 			fgets(UserInput, sizeof(UserInput), stdin);
@@ -108,8 +118,19 @@ void Profile(int ProfileID)
 			NameLenght = strlen(UserInput);
 
 			if(NameLenght >= 4 && NameLenght <= 64) {
-				user[UserDataLocation].name = realloc(user[UserDataLocation].name, sizeof(char));
-				strcpy(user[UserDataLocation].name, UserInput);
+				user[UserDataLocation].name = realloc(user[UserDataLocation].name, NameLenght * sizeof(char));
+
+				if(user[UserDataLocation].name == NULL) {
+					while(user[UserDataLocation].name == NULL) {
+						user[UserDataLocation].name = realloc(user[UserDataLocation].name, OldNameLenght * sizeof(char));
+					}
+					printf("Something went wrong\n");
+					strcpy(user[UserDataLocation].name, OldName);
+				}
+
+				else {
+					strcpy(user[UserDataLocation].name, UserInput);
+				}
 				break;
 			}
 
@@ -119,7 +140,7 @@ void Profile(int ProfileID)
 			break;
 
 		case 2:
-			printf("Changin password\n");
+			printf("Changing password\n");
 			printf("User: ");
 			fgets(UserInput, sizeof(UserInput), stdin);
 			UserInput[strcspn(UserInput, "\n")] = '\0';
@@ -127,7 +148,15 @@ void Profile(int ProfileID)
 
 			if(PasswordLenght >= 8 && PasswordLenght <= 64) {
 				user[UserDataLocation].name = realloc(user[UserDataLocation].name, sizeof(char));
-				strcpy(user[UserDataLocation].name, UserInput);
+				
+				for(int i = 0; i < PasswordLenght; i++) {
+					HashCache[i] = ((UserInput[i] % 10) + '0');
+					if(i == (PasswordLenght + 1)) {
+					HashCache[i] = '\0';
+					}
+				}
+
+				strcpy(user[UserDataLocation].name, HashCache);
 				break;
 			}
 
@@ -142,7 +171,7 @@ void Profile(int ProfileID)
 			break;
 
 		case 4:
-			printf("\nGoodbye user\n");
+			printf("\nGoodbye user\n\n");
 			IsProfileRunning = false;
 			IsMiniCommerceRunning = false;
 			break;
