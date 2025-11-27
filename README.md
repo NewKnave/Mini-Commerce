@@ -1,3 +1,3 @@
-# NKMiniProject
+# Mini Commerce
 
-Project concepts. A public repository
+A concept on what a digital market is
