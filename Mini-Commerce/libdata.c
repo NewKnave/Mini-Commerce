@@ -13,13 +13,6 @@ int ProductIDCounter = 0;
 int TotalProducts = 0;
 int TotalProductsInCart = 0;
 
-void CreateLinkedList(void)
-{
-	MarketData *temp;
-	MarketData *next;
-	MarketData *product;
-}
-
 void MiniCommerce(int ClientID);
 void Profile(int ProfileID);
 void Buy(void);

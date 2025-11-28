@@ -1,20 +1,6 @@
 #define SUCCESS 0
 #define FAILED 1
 
-typedef struct
-{
-	char *name;
-	char *password;
-	int id;
-} ClientData;
-
-ClientData *user;
-
-int ClientIDCounter = 0;
-int TotalClients = 0;
-
-int ClientSession = 0;
-
 int SignIn(void);
 int SignInProcess(void);
 void SignUp(void);
@@ -99,15 +85,31 @@ void SignUp(void)
 
 int SignUpProcess(void)
 {
-	char NameInput[64];
-	int NameLenght = 0;
-	char PasswordInput[64];
-	int PasswordLenght = 0;
-	char HashCache[64];
+	typedef struct {
+		char *name;
+		char *password;
+		char *id;
+	} ClientData;
+
+	ClientData *user;
 
 	bool IsValidatingName = true;
 	bool IsValidatingPassword = true;
 	int ErrorCounter = 0;
+
+	int ClientIDCounter = 0;
+
+	char NameInput[64];
+	int NameLenght = 0;
+
+	char PasswordInput[64];
+	int PasswordLenght = 0;
+
+	user = realloc(user, sizeof(user));
+	if(user == NULL) {
+		printf("System error - LC1 - Memory allocation failure\n");
+		return FAILED;
+	}
 
 	printf("\nPlease do not use your real name\n");
 	printf("Minimum name lenght is 4\n");
@@ -121,6 +123,17 @@ int SignUpProcess(void)
 		if(NameLenght >= 4 && NameLenght <= 64) {
 			ErrorCounter = 0;
 			IsValidatingName = false;
+
+			user[ArrayLocation].name = malloc(NameLenght * sizeof(char));
+
+			if(user[ArrayLocation].name == NULL) {
+				printf("System error - LC2 - Memory allocation failure\n");
+				return FAILED;
+			}
+
+			else {
+				strcpy(user[ArrayLocation].name, NameInput);
+			}
 		}
 
 		else if(ErrorCounter == 2) {
@@ -144,6 +157,17 @@ int SignUpProcess(void)
 
 		if(PasswordLenght >= 8 && PasswordLenght <= 64) {
 			IsValidatingPassword = false;
+
+			user[ArrayLocation].password = malloc(PasswordLenght * sizeof(char));
+
+			if(user[ArrayLocation].password == NULL) {
+				printf("System error - LC3 - Memory allocation failure\n");
+				return FAILED;
+			}
+
+			else {
+			
+			}
 		}
 
 		else if(ErrorCounter == 2) {
@@ -156,41 +180,6 @@ int SignUpProcess(void)
 			ErrorCounter++;
 		}
 	}
-
-	ClientIDCounter = ClientIDCounter + 10;
-	TotalClients = TotalClients + 1;
-	int ArrayLocation = (TotalClients - 1);
-
-	user = realloc(user, TotalClients * sizeof(user));
-	if(user == NULL) {
-		printf("System error - LC1 - Memory allocation failure\n");
-		return FAILED;
-	}
-
-	// Name
-	user[ArrayLocation].name = malloc(NameLenght * sizeof(char));
-	if(user[ArrayLocation].name == NULL) {
-		printf("System error - LC2 - Memory allocation failure\n");
-		return FAILED;
-	}
-	strcpy(user[ArrayLocation].name, NameInput);
-
-	// Password
-	user[ArrayLocation].password = malloc(PasswordLenght * sizeof(char));
-	if(user[ArrayLocation].password == NULL) {
-		printf("System error - LC3 - Memory allocation failure\n");
-		return FAILED;
-	}
-
-	// Mini hash
-	for(int i = 0; i < PasswordLenght; i++) {
-		HashCache[i] = ((PasswordInput[i] % 10) + '0');
-	}
-	HashCache[PasswordLenght] = '\0';
-	strcpy(user[ArrayLocation].password, HashCache);
-
-	// ID
-	user[ArrayLocation].id = ClientIDCounter;
 
 	return SUCCESS;
 }
