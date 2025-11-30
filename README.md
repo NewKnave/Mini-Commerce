@@ -1,3 +1,15 @@
 # Mini Commerce
 
-A concept on what a digital market is
+Terminal-base E-commerce
+
+# MiniCommerce.c
+
+// Documentation
+
+# libclient.c
+
+// Documentation
+
+# libdata.x
+
+// Documentation
