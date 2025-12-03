@@ -1,15 +1,89 @@
-const int COMMERCE_MAX_ID_LENGHT = (20 + 1);
-const int COMMERCE_MAX_NAME_LENGHT = (64 + 1);
+// Variable set 1 on "libglobalvar.c"
+// const int COMMERCE_MAX_NAME_LENGHT = (20 + 1);
 
-void MiniCommerce(void);
-void Profile(void);
-void Buy(void);
-void Sell(void);
-void Cart(void);
+void Profile(int ClientID) {
+
+	FILE *file_client = NULL;
+
+	file_client = fopen("data_client.dat", "rb");
+
+	typedef struct {
+		char name[CLIENT_MAX_NAME_LENGHT];
+		char hash[CLIENT_MAX_HASH_LENGHT];
+		int id;
+	} ClientData;
+
+	ClientData client[1];
+
+	fclose(file_client);
+
+	return;
+}
+
+void Buy(void) {
+
+	FILE *file_product = NULL;
+
+	typedef struct {
+		int id;
+		char name[COMMERCE_MAX_NAME_LENGHT];
+		float price;
+		int quantity;
+	} CommerceData;
+
+	CommerceData product[1];
+
+	return;
+}
+
+void Sell(void) {
+
+	int TEMP_ID;
+	char TEMP_NAME[COMMERCE_MAX_NAME_LENGHT];
+	float TEMP_PRICE;
+	int TEMP_QUANTITY;
+
+	FILE *file_product = NULL;
+
+	typedef struct {
+		int id;
+		char name[COMMERCE_MAX_NAME_LENGHT];
+		float price;
+		int quantity;
+	} CommerceData;
+
+	bool IsFuncSellRunning = true;
+
+	while(IsFuncSellRunning == true) {
+	
+	}
+
+	CommerceData product[1];
+
+	return;
+}
+
+void Cart(void) {
+
+	FILE *file_cart = NULL;
+
+	typedef struct {
+		int id;
+		char name[COMMERCE_MAX_NAME_LENGHT];
+		float price;
+		int quantity;
+	} CommerceData;
+
+	CommerceData product[1];
+
+	return;
+}
 
 bool IsMiniCommerceRunning = true;
 
-void MiniCommerce(void) {
+void MiniCommerce(int CLIENT_SESSION) {
+
+	int ClientID = CLIENT_SESSION;
 
 	char UserInput[64];
 	int Selection;
@@ -29,7 +103,7 @@ void MiniCommerce(void) {
 		switch (Selection) {
 
 		case 1:
-			Profile();
+			Profile(ClientID);
 			break;
 
 		case 2:
@@ -50,66 +124,6 @@ void MiniCommerce(void) {
 
 		fflush(stdin);
 	}
-
-	return;
-}
-
-void Profile(void) {
-
-	FILE *file_client;
-
-	typedef struct {
-		char name[CLIENT_MAX_NAME_LENGHT];
-		char hash[CLIENT_MAX_HASH_LENGHT];
-		char id[CLIENT_MAX_ID_LENGHT];
-	} CommerceData;
-
-	return;
-}
-
-void Buy(void) {
-
-	FILE *file_product;
-
-	typedef struct {
-		char id[COMMERCE_MAX_ID_LENGHT];
-		char name[COMMERCE_MAX_NAME_LENGHT];
-		float price;
-		int quantity;
-	} CommerceData;
-
-	return;
-}
-
-void Sell(void) {
-
-	int TEMP_ID;
-	char TEMP_NAME[COMMERCE_MAX_NAME_LENGHT];
-	float TEMP_PRICE;
-	int TEMP_QUANTITY;
-
-	FILE *file_product;
-
-	typedef struct {
-		int id[COMMERCE_MAX_ID_LENGHT];
-		char name[COMMERCE_MAX_NAME_LENGHT];
-		float price;
-		int quantity;
-	} CommerceData;
-
-	return;
-}
-
-void Cart(void) {
-
-	FILE *file_product;
-
-	typedef struct {
-		char id[COMMERCE_MAX_ID_LENGHT];
-		char name[COMMERCE_MAX_NAME_LENGHT];
-		float price;
-		int quantity;
-	} CommerceData;
 
 	return;
 }

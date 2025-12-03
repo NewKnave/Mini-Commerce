@@ -4,8 +4,9 @@
 #include <string.h>
 #include <time.h>
 
-#include "libclient.c"
+#include "libglobalvar.c"
 #include "libdata.c"
+#include "libclient.c"
 
 int IsUnderMaintenance = false;
 
@@ -20,8 +21,10 @@ int main(void) {
 	char UserInput[64];
 	int Selection;
 
+	printf("%s\n\n", __DATE__);
 	while (IsProgramRunning == true) {
-		printf("# Home #\n");
+		printf("# Home #\n\n");
+		printf("Please select one of the following:\n");
 		printf("[1] Sign In\n");
 		printf("[2] Sign up\n");
 		printf("[3] Exit\n");
@@ -34,9 +37,7 @@ int main(void) {
 		switch (Selection) {
 
 		case 1:
-			if(SignIn() == SUCCESS) {
-				MiniCommerce();
-			}
+			SignIn();
 			break;
 
 		case 2:
