@@ -56,7 +56,7 @@ int SignIn(void) {
 			if(strcmp(FETCH_NAME, client[0].name) == 0 && strcmp(FETCH_HASH, client[0].hash) == 0) {
 
 				printf("\nSign in successfully!\n");
-				printf("Hello, %s\n\n", client[0].name;
+				printf("Hello, %s\n\n", client[0].name);
 
 				// To use the fetched id
 				MiniCommerce(client[0].id);
@@ -133,19 +133,22 @@ int SignUpProcess(void) {
 
 	// The main process of signing up
 	// Initialize variables
-	char	TEMP_NAME[CLIENT_MAX_NAME_LENGHT];
-	int	   TEMP_NAME_LENGHT = 0;
+	char TEMP_NAME[CLIENT_MAX_NAME_LENGHT];
+	int TEMP_NAME_LENGHT = 0;
 
-	char    TEMP_PASSWORD[CLIENT_MAX_HASH_LENGHT];
-	char    TEMP_PASSWORD_COMFIRMATION[CLIENT_MAX_HASH_LENGHT];
-	int       TEMP_PASSWORD_LENGHT = 0;
+	char TEMP_PASSWORD[CLIENT_MAX_HASH_LENGHT];
+	char TEMP_PASSWORD_COMFIRMATION[CLIENT_MAX_HASH_LENGHT];
+	int TEMP_PASSWORD_LENGHT = 0;
 
-	char    TEMP_HASH[CLIENT_MAX_HASH_LENGHT];
+	char TEMP_HASH[CLIENT_MAX_HASH_LENGHT];
 
-	int       ErrorCounter = 0;
+	int NameErrorCounter = 0;
+	int PasswordErrorCounter = 0;
+	int ConfirmPasswordErrorCounter = 0;
 
 	bool IsValidatingName = true;
 	bool IsValidatingPassword = true;
+	bool IsValidatingConfirmPassword = true;
 
 	printf("\nThis program is a concept,\n");
 	printf("so please do not input any password\n");
@@ -166,21 +169,18 @@ int SignUpProcess(void) {
 			IsValidatingName = false;
 		}
 
-		else if(ErrorCounter == 2) {
+		else if(NameErrorCounter == 2) {
 			printf("Too many errors, exiting\n\n");
 			return FAILED;
 		}
 
 		else {
 			printf("Invalid name\n\n");
-			ErrorCounter++;
+			NameErrorCounter++;
 		}
 
 		fflush(stdin);
 	}
-
-	// To reset the error counter
-	ErrorCounter = 0;
 
 	printf("\nPlease input a password\n");
 	printf("Minimum password lenght is 8 characters\n");
@@ -192,17 +192,38 @@ int SignUpProcess(void) {
 		TEMP_PASSWORD_LENGHT = strlen(TEMP_PASSWORD);
 
 		if(TEMP_PASSWORD_LENGHT >= 8 && TEMP_PASSWORD_LENGHT <= CLIENT_MAX_HASH_LENGHT) {
+
+			while(IsValidatingConfirmPassword) {
+				printf("Confirm password: ");
+				fgets(TEMP_PASSWORD_COMFIRMATION, sizeof(TEMP_PASSWORD_COMFIRMATION), stdin);
+				TEMP_PASSWORD_COMFIRMATION[strcspn(TEMP_PASSWORD_COMFIRMATION, "\n")] = '\0';
+
+				if(strcmp(TEMP_PASSWORD_COMFIRMATION, TEMP_PASSWORD) == 0) {
+					IsValidatingConfirmPassword = false;
+				}
+
+				else if(ConfirmPasswordErrorCounter == 2) {
+					printf("Too many errors, exiting\n\n");
+					return FAILED;
+				}
+
+				else {
+					printf("Password does not match\n\n");
+					ConfirmPasswordErrorCounter++;
+				}
+			}
+	
 			IsValidatingPassword = false;
 		}
 
-		else if(ErrorCounter == 2) {
+		else if(PasswordErrorCounter == 2) {
 			printf("Too many errors, exiting\n\n");
 			return FAILED;
 		}
 
 		else {
 			printf("Invalid password\n\n");
-			ErrorCounter++;
+			PasswordErrorCounter++;
 		}
 	}
 
